@@ -17,7 +17,7 @@
  const rest = new REST({ version: '10' }).setToken(config.token);
     (async () => {
         try {
-            await rest.put( Routes.applicationGuildCommands(config.id, config.guild), {body: []});
+            await rest.put( Routes.applicationCommands(config.id), {body: commands});
         } catch (error) {
             console.error(error);
         }
