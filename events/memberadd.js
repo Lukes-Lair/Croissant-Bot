@@ -10,7 +10,6 @@ module.exports = {
         if (!channel) return;
 
         if (exists) {
-            
             channel.send(`${exists.message.replaceAll("${user}", `${user}`).replaceAll("${guild}", `${guild}`)}`)
         }
     }

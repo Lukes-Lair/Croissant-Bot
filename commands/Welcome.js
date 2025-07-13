@@ -38,11 +38,12 @@ module.exports = {
         const subcommand = interaction.options.getSubcommand();
 
         if (subcommand === 'add') {
-            
+
             await WelcomeDB.findOneAndUpdate(
                 { guildID: guild },
                 { guildID: guild, message: messageText },
-                { upsert: true, new: true });
+                { upsert: true, new: true }
+            );
 
             interaction.reply(`I will now welcome people with the message \`${messageText}\``);
 
@@ -62,7 +63,6 @@ module.exports = {
 
             interaction.reply("Disabled Welcome Messages");
         }
-
     }
 };
 
