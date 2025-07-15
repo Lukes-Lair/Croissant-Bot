@@ -1,6 +1,11 @@
 const config = require("./config.json")
 const mongoose = require("mongoose");
 
+const hierarchySchema = new mongoose.Schema({
+    userID: {type: String, required: true},
+    title: {type:String, required: true}
+})
+const hierarchyDB = mongoose.model("hierarchy", hierarchySchema);
 const candidateSchema = new mongoose.Schema({
     userID: {type: String, required: true}
 });
@@ -51,4 +56,5 @@ module.exports = {
     creatorDB,
     WelcomeDB,
     candidateDB,
+    hierarchyDB,
 }
