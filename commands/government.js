@@ -28,6 +28,7 @@ module.exports = {
                     user
                     .setName('candidate')
                     .setDescription('Candidate')
+                    .setRequired(true)
                 )
             )
             .addSubcommand(subcommand =>
