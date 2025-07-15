@@ -17,6 +17,7 @@ module.exports = {
                     user
                     .setName('user')
                     .setDescription('user')
+                    .setRequired(true)
                 )
             )
             .addSubcommand(subcommand =>
@@ -53,7 +54,7 @@ module.exports = {
 
         const user = interaction.options.getUser('user');
 
-        const exists = await candidateDB.find({ userID: user.id});
+        const exists = await candidateDB.findOne({ userID: user.id});
 
         if (exists) {
             interaction.reply({
@@ -69,11 +70,35 @@ module.exports = {
         interaction.reply(`${user} has been saved as a candidate`)
         } else if (subcommand === 'delete') {
 
+            if (!isTrusted) {
+                interaction.reply({
+                    content: 'You are not authorized to run this command'
+                });
+                return;
+            }
+
+            const user = interaction.options.getUser('candidate');
+            const attempt = await candidateDB.findOneAndDelete({userID: user.ids});
+            if (attempt == null) {
+                interaction.reply({
+                    content: 'That is not a valid candidate ',
+                    ephemeral: true
+                });
+                return;
+            }
+            interaction.reply(`${user} is no longer a candidate`);
         } else if (subcommand === 'list') {
 
-            const candidates = candidateDB.distinct("userID");
+            const candidates = await candidateDB.distinct("userID");
+            let message = `The current election candidates are:\n`;
 
-            console.log(candidates);
+            for (const user of candidates) {
+
+                message += `<@${user}>\n`;
+                
+            }
+
+            interaction.reply(message)
 
         }
 
