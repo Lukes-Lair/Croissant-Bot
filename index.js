@@ -35,6 +35,7 @@ const client = new Client({
 
 
     client.on("interactionCreate", async interaction => {
+        /** @param {import('discord.js').ChatInputCommandInteraction} interaction */
         execute(interaction, client);
     });
 
