@@ -1,4 +1,4 @@
-const config = require("./config.json")
+require("dotenv").config();
 const mongoose = require("mongoose");
 
 const hierarchySchema = new mongoose.Schema({
@@ -42,7 +42,7 @@ const creatorDB = mongoose.model("creators", creatorSchema);
 
 async function connect() {
     try {
-        await mongoose.connect(config.url);
+        await mongoose.connect(process.env.url);
         console.log("connected");
     } catch (error) {
         console.log(error);

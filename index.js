@@ -4,7 +4,7 @@ const path = require("path");
 const {execute} = require("./events/interaction.js");
 const {executeMessage} = require("./events/messagecreate.js");
 const { executeAdd } = require("./events/memberadd.js");
-const config = require("./config.json")
+require("dotenv").config();
 
 const client = new Client({
     allowedMentions: {parse:[]},
@@ -74,4 +74,4 @@ client.on('ready', () => {
             console.log(handleException);
         });
 
-client.login(config.token);
+client.login(process.env.token);

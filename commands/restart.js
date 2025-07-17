@@ -1,6 +1,7 @@
 const {exec} = require("child_process");
 const { SlashCommandBuilder } = require("discord.js");
-const config = require("../config.json");
+require("dotenv").config();
+const path = require("path")
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,7 +14,7 @@ module.exports = {
             interaction.reply({content:'You are NOT allowed to do that', ephemeral: true})
             return;
         }
-        exec(config.command, async (error) => {
+        exec(path.join("..", "restart.sh"), async (error) => {
             if (error) {
                 console.error(`❌ Error during restart:\n${error.message}`);
                  await interaction.reply({content: `Restart Failed! error: ${error}`, ephemeral: true})
