@@ -1,0 +1,27 @@
+{
+  "name": "croissant-bot",
+  "version": "1.0.0",
+  "description": "A discord bot to help with Croissantopia!",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^14.21.0",
+    "mongoose": "^8.16.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lukes-Lair/Croissant-Bot.git"
+  },
+  "keywords": [
+    "Discord",
+    "Croissant"
+  ],
+  "author": "lukeslair",
+  "license": "GPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/Lukes-Lair/Croissant-Bot/issues"
+  },
+  "homepage": "https://github.com/Lukes-Lair/Croissant-Bot"
+}

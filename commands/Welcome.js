@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require("discord.js");
-const interaction = require("../interaction");
 const {WelcomeDB} = require("../database");
 
 module.exports = {

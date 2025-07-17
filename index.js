@@ -1,7 +1,7 @@
 const {Client, IntentsBitField, Collection} = require("discord.js");
 const fs = require('fs');
 const path = require("path");
-const {execute} = require("./interaction.js");
+const {execute} = require("./events/interaction.js");
 const {executeMessage} = require("./events/messagecreate.js");
 const { executeAdd } = require("./events/memberadd.js");
 const config = require("./config.json")
