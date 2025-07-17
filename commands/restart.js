@@ -13,7 +13,15 @@ module.exports = {
             interaction.reply({content:'You are NOT allowed to do that', ephemeral: true})
             return;
         }
-        exec(`${config.command}`)
+        await exec(config.command, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`❌ Error during restart:\n${error.message}`);
+                return;
+            }
+            if (stderr) console.warn(`⚠️ stderr:\n${stderr}`);
+            if (stdout) console.log(`✅ stdout:\n${stdout}`);
+        })
         await interaction.reply({content: 'restarted!', ephemeral: true})
+        
     }
 }
