@@ -50,7 +50,7 @@ client.on("guildMemberAdd", user => {
 })
 
 
-client.on('ready', () => {
+client.on('ready', async () => {
 
     console.log("ready");
 

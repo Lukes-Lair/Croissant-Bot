@@ -28,6 +28,7 @@ module.exports = {
                 .setName('emoji')
                 .setDescription('What emoji to delete out of the database')
                 .setRequired(true)
+                .setAutocomplete(true)
             )
         )
         .addSubcommand(subcommand =>
@@ -37,8 +38,9 @@ module.exports = {
             .addStringOption(string =>
                 string
                 .setName('emoji')
-                .setDescription("What emoji to delete all messages with ( Might not show up in dropdown)")
+                .setDescription("What emoji to delete all messages with")
                 .setRequired(true)
+                .setAutocomplete(true)
             )
         )
         .addSubcommand(subcommand =>
@@ -50,6 +52,7 @@ module.exports = {
                 .setName('emoji-name')
                 .setDescription('What croissant to pull up the leaderboard for')
                 .setRequired(false)
+                .setAutocomplete(true)
             )
         )
         .addSubcommand(subcommand =>
@@ -61,7 +64,9 @@ module.exports = {
                 string
                 .setName('emoji-name')
                 .setDescription('What emoji do you want to look up')
-                .setRequired(true))
+                .setRequired(true)
+                .setAutocomplete(true)
+            )
             .addUserOption(user =>
                 user
                 .setName('member')
