@@ -33,18 +33,6 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
-            .setName('delete-messages')
-            .setDescription('Deletes all messages in the database from all users that include a specified emoji')
-            .addStringOption(string =>
-                string
-                .setName('emoji')
-                .setDescription("What emoji to delete all messages with")
-                .setRequired(true)
-                .setAutocomplete(true)
-            )
-        )
-        .addSubcommand(subcommand =>
-            subcommand
             .setName('leaderboard')
             .setDescription('Who has send the most croissants')
             .addStringOption(string =>
@@ -160,6 +148,7 @@ module.exports = {
             const entry = await CroissantEmojiDB.findOneAndDelete(
                 {emoji: emojiName, guildID: guild}
             )
+            const deleted = await CroissantMessagesDB.deleteMany({guildID: guild, name: entry.name});
             if (!entry) {
                 interaction.reply({
                     content: 'That emoji does not exist',
@@ -168,33 +157,6 @@ module.exports = {
                 return;
             }
             interaction.reply(`Successfully deleted \`${emojiName}\` from the database`)
-        } else if (subcommand === 'delete-messages') {
-            const emoji = interaction.options.getString('emoji');
-            if (!isTrusted) {
-                interaction.reply({
-                    content: 'You are not authorized to run this command',
-                    ephemeral: true
-                });
-                return;
-            }
-            await interaction.deferReply();
-            const result = await CroissantMessagesDB.deleteMany({ guildID: guild, type: emoji });
-
-            if (result.deletedCount === 0) {
-                interaction.editReply({
-                    content: 'Invalid emoji or no messages found',
-                    ephemeral: true
-                });
-                return;
-            }
-
-
-            interaction.editReply({
-                content: `Successfully deleted ${result.deletedCount} User's message(s) for emoji: ${emoji}`,
-                ephemeral: true
-            });
-
-
         } else if (subcommand === 'leaderboard') {
             const emojiName = interaction.options.getString('emoji-name');
             if (emojiName === null) {
