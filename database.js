@@ -18,6 +18,7 @@ const WelcomeDB = mongoose.model("welcome", welcomeSchema);
 
 
 const croissantEmojiSchema = new mongoose.Schema({
+    date: {type: new Date, default: Date.now()},
     emoji: {type: String, required: true},
     name: {type: String, required: true},
     guildID: {type: String, required: true}
@@ -30,7 +31,7 @@ const croissantMessagesSchema = new mongoose.Schema({
     guildID: { type: String, required: true},
     name: { type: String, required: true},
     count: { type: Number, required: true},
-    timestamp: { type: Date, default: Date.now }
+    timestamp: { type: Date, default: Date.now() }
 })
 const CroissantMessagesDB = mongoose.model("croissantmessages", croissantMessagesSchema);
 

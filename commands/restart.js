@@ -21,7 +21,7 @@ module.exports = {
                  await interaction.editReply({content: `Restart Failed! error: ${error}`, ephemeral: true})
                 return;
             } else {
-                await interaction.editReply({content: 'restarted!', ephemeral: true})
+                await interaction.editReply({content: 'Successfully restarted and pulled github changes!', ephemeral: true})
             }
     
         })

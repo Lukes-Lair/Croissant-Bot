@@ -115,25 +115,14 @@ module.exports = {
             }
             const emojiID = interaction.options.getString('emoji');
             const emojiText = interaction.options.getString('name');
-            const exists = await CroissantEmojiDB.findOne({
+            const exists = await CroissantEmojiDB.findOneAndUpdate({
                 name: emojiText,
                 emoji: emojiID,
                 guildID: guild
-            });
-            //I could have used findOneAndUpdate but I would rather have to use delete then be able to change everything from the add command
+            }, {name: emojiText}, {setDefaultsOnInsert: true, upsert: true, new: true});
 
-            if (exists) {
-                interaction.reply({
-                    content: 'This emoji is already in the database. Please choose another',
-                    ephemeral: true
-                });
-                return;
-            }
 
-            const newEntry = new CroissantEmojiDB({emoji: emojiID, name: emojiText, guildID: guild});
-            await newEntry.save();
-
-            interaction.reply({ content: `Successfully saved ${emojiID} with text \`${emojiText}\` to the database!`})
+            await interaction.reply({ content: `Successfully saved ${emojiID} with text \`${emojiText}\` to the database!`})
 
         } else if (subcommand === 'delete') {
             if (!isTrusted) {
@@ -163,7 +152,7 @@ module.exports = {
 
 
                 const top10 = await CroissantMessagesDB.find({ guildID: guild}).sort({count: -1}).limit(10).lean();
-                let message = `🏆 Top 10 croissanters since 7/9/25\n\n`//INSERT THE DATE THAT THIS CODE IS IMPLEMENTED
+                let message = `🏆 Top 10 croissanters\n\n`//INSERT THE DATE THAT THIS CODE IS IMPLEMENTED
                 for (let i = 0; i <  top10.length; i++) {
                 const userID = top10[i].userID;
                 const count = top10[i].count;
@@ -193,6 +182,7 @@ module.exports = {
             }
 
             const emojiname = emojiEntry.name;
+            const emojidate = emojiEntry.date.toDateString();
             const sorted = await CroissantMessagesDB
                 .find({ name: emojiname, guildID: guild })
                 .sort({ count: -1 }) 
@@ -204,7 +194,7 @@ module.exports = {
                 return interaction.reply({ content: 'No data found for that emoji.', ephemeral: true });
             }
 
-            let message = `🏆 Top 10 croissanters for ${emojiName} since 7/9/25:\n\n`;
+            let message = `🏆 Top 10 croissanters for ${emojiName} since ${emojidate}:\n\n`;
 
             for (let i = 0; i < sorted.length; i++) {
                 const userID = sorted[i].userID;
