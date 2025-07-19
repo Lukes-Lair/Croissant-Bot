@@ -14,13 +14,14 @@ module.exports = {
             interaction.reply({content:'You are NOT allowed to do that', ephemeral: true})
             return;
         }
+        await interaction.deferReply({ephemeral: true});
         exec(path.join("..", "restart.sh"), async (error) => {
             if (error) {
                 console.error(`❌ Error during restart:\n${error.message}`);
-                 await interaction.reply({content: `Restart Failed! error: ${error}`, ephemeral: true})
+                 await interaction.editReply({content: `Restart Failed! error: ${error}`, ephemeral: true})
                 return;
             } else {
-                await interaction.reply({content: 'restarted!', ephemeral: true})
+                await interaction.editReply({content: 'restarted!', ephemeral: true})
             }
     
         })
