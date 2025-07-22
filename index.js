@@ -2,7 +2,7 @@ const {Client, IntentsBitField, Collection} = require("discord.js");
 const fs = require('fs');
 const path = require("path");
 const {execute} = require("./events/interaction.js");
-const {executeMessage} = require("./events/messagecreate.js");
+const {executeMessage, deleteFromSpam} = require("./events/messagecreate.js");
 const { executeAdd } = require("./events/memberadd.js");
 require("dotenv").config();
 
@@ -44,6 +44,7 @@ const client = new Client({
 client.on("messageCreate", message => {
     executeMessage(message, client);
 });
+setInterval(deleteFromSpam, 3000);
 
 client.on("guildMemberAdd", user => {
     executeAdd(user);

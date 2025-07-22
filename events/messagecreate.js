@@ -1,13 +1,16 @@
 const {CroissantEmojiDB, CroissantMessagesDB} = require("../database");
-const {PermissionsBitField, Colors, MessageFlags} = require("discord.js")
-
+let spam = [];
+let spam2 = []
 module.exports = {
     /** @param {import("discord.js").Message} message */
     async executeMessage(message, client) {
-        
         if (message.author.bot) return;
         const allEmojis = (await CroissantEmojiDB.find().lean()).filter(emojis => message.content.includes(emojis.emoji));
-        if (allEmojis.length !== 0) {
+        if (allEmojis.length === 0) return;
+            spam.push(message.author.id);
+            if (spam.filter(item => item === message.author.id).length >= 3) {
+                return;
+            }
             const user = message.author.id;
             for(const emoji of allEmojis){
                 if (emoji.guildID == message.guild.id){
@@ -18,9 +21,20 @@ module.exports = {
                 );
                 }
             }
-        }
         if (message.content.toLowerCase() === "hehe") {
             message.channel.send("HEHEHEHEHEHE");
         } 
-    }
+    },
+    deleteFromSpam() {
+        if (spam.length === 0) return;
+        for (let i = 0; i < spam.length; i++) {
+            if (spam2.findIndex(s => s === spam[i]) == -1) {
+                spam2.push(spam[i]);
+            }
+        }
+        for (let i = 0; i < spam2.length; i++) {
+            const val = spam.findIndex(s => s === spam2[i]);
+            spam.splice(val, 1);
+        }
+        }
 }
