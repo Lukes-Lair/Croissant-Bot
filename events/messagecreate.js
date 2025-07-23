@@ -13,10 +13,10 @@ module.exports = {
             }
             const user = message.author.id;
             for(const emoji of allEmojis){
-                    console.log(allEmojis)
+                const inc = message.content.split(emoji.emoji).length -1
                 await CroissantMessagesDB.findOneAndUpdate(
                     {userID: user, name: emoji.name, guildID: message.guild.id},
-                    {$inc: { count: message.content.split(emoji.emoji).length -1 }},
+                    {$inc: { count: inc > 5 ? 0 : inc  }},
                     {upsert: true, new:true, setDefaultsOnInsert: true}
                 );
             }
