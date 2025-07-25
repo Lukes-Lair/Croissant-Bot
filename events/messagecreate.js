@@ -25,7 +25,7 @@ module.exports = {
         } 
     },
     deleteFromSpam() {
-        if (spam.length === 0) return;
+        if (spam.length !== 0) {
         for (let i = 0; i < spam.length; i++) {
             if (spam2.findIndex(s => s === spam[i]) == -1) {
                 spam2.push(spam[i]);
@@ -34,6 +34,7 @@ module.exports = {
         for (let i = 0; i < spam2.length; i++) {
             const val = spam.findIndex(s => s === spam2[i]);
             spam.splice(val, 1);
+        }
         }
         }
 }
