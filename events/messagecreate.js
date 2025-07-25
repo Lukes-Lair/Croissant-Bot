@@ -5,6 +5,9 @@ module.exports = {
     /** @param {import("discord.js").Message} message */
     async executeMessage(message, client) {
         if (message.author.bot) return;
+        if (message.content.toLowerCase() === "hehe") {
+            message.channel.send("HEHEHEHEHEHE");
+        } 
         const allEmojis = (await CroissantEmojiDB.find({ guildID: message.guild.id}).lean()).filter(emojis => message.content.includes(emojis.emoji));
         if (allEmojis.length === 0) return;
             spam.push(message.author.id);
@@ -19,10 +22,7 @@ module.exports = {
                     {$inc: { count: inc > 5 ? 0 : inc  }},
                     {upsert: true, new:true, setDefaultsOnInsert: true}
                 );
-            }
-        if (message.content.toLowerCase() === "hehe") {
-            message.channel.send("HEHEHEHEHEHE");
-        } 
+            } 
     },
     deleteFromSpam() {
         if (spam.length !== 0) {
