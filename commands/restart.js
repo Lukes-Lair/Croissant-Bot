@@ -15,7 +15,7 @@ module.exports = {
             return;
         }
         await interaction.deferReply({ephemeral: true});
-        exec(path.join("..", "restart.sh"), async (error) => {
+        exec(`sudo ${path.join("..", "restart.sh")}`, async (error) => {
             if (error) {
                 console.error(`❌ Error during restart:\n${error.message}`);
                  await interaction.editReply({content: `Restart Failed! error: ${error}`, ephemeral: true})
