@@ -6,7 +6,7 @@ module.exports = {
     async executeMessage(message, client) {
         if (message.author.bot) return;
         if (message.content.toLowerCase() === "hehe") {
-            message.channel.send("HEHEHEHEHEHE");
+            await message.channel.send("HEHEHEHEHEHE");
         } 
         const allEmojis = (await CroissantEmojiDB.find({ guildID: message.guild.id}).lean()).filter(emojis => message.content.includes(emojis.emoji));
         if (allEmojis.length === 0) return;
