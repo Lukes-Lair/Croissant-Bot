@@ -90,12 +90,6 @@ module.exports = {
                                 .setDescription('User to add')
                                 .setRequired(true)
                         )
-                        .addStringOption(int =>
-                            int
-                                .setName('id')
-                                .setDescription('id of the user')
-                                .setRequired(true)
-                        )
                 )
                 .addSubcommand(subcommand =>
                     subcommand
@@ -237,40 +231,41 @@ module.exports = {
                 
             if (subcommand === 'add') {
             const userid = interaction.options.getUser('user').id
-            const idid = await interaction.options.getString('id')
+            const userobj = interaction.options.getUser('user')
+            if (userobj.bot) {await interaction.reply({content: 'Bots cant vote silly', ephemeral: true}); return;}
+            let idid =  Math.floor(Math.random() * 9000000000) + 1000000000;
                 const exists = await idDB.findOne({
                     userID: userid
                 });
-                const exists2 = await idDB.findOne({
+                
+                let exists2 = await idDB.findOne({
                     id: idid
                 });
-
-                if (exists2) {
-                    await interaction.reply({ content:`Im sorry but you can not use that id`, ephemeral: true})
+                if (!isTrusted && userobj.id !== interaction.user.id) {
+                    await interaction.reply({content: "*You* can not change voter ids.", ephemeral: true})
                     return;
                 }
+                
 
-                if (!isTrusted && interaction.user.id !== userid) {
-                    await interaction.reply({content: "*You* can not change Ids.", ephemeral: true})
-                    return;
-                }
+                    while (exists2) {
+                        idid =  Math.floor(Math.random() * 9000000000) + 1000000000;
+                        exists2 = await idDB.findOne({
+                            id: idid
+                        });
+                    }
 
-                if (!isTrusted && exists) {
-                    await interaction.reply({content: "*You* can not change Ids.", ephemeral: true})
-                    return;
-                }
-
-                if (idid.length != 10) {
-                    await interaction.reply({content: 'The id has to be 10 digits', ephemeral: true});
-                    return;
-                }
                 const result = await idDB.findOneAndUpdate(
                     { userID: userid },
                     {userID: userid, id: idid},
                     { upsert: true, new: true }
                 );
-
-                    await interaction.reply({content: `<@${userid}> now has the id ${idid}`, ephemeral: true});
+                    if (userobj.id !== interaction.user.id) {
+                        await interaction.reply({content: `<@${userid}> now has a new voter id`, ephemeral: true});
+                    } else {
+                        await interaction.reply({content: `<@${userid}> now has the voter id of ||${idid}||`, ephemeral: true});
+                    }
+                    
+                    await userobj.send(`Your Croissantopia Voter ID is now ||${idid}||. This is the number you will use when voting\n-# This is confidential info and should not be shared.\n-# If you believe a mistake has been made please contact a member of yeast or the current president`);
 
 
             } else if (subcommand === 'delete') {
@@ -284,9 +279,9 @@ module.exports = {
                 });
 
                 if (result){
-                await interaction.reply(`Deleted <@${userid}>'s id`)
+                await interaction.reply(`Deleted <@${userid}>'s voter id`)
                 } else {
-                await interaction.reply({content: `<@${userid}> does not have an id`, ephemeral: true})
+                await interaction.reply({content: `<@${userid}> does not have a voter id`, ephemeral: true})
                 }
             }
         }
