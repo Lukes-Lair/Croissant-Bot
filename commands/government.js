@@ -241,6 +241,14 @@ module.exports = {
                 const exists = await idDB.findOne({
                     userID: userid
                 });
+                const exists2 = await idDB.findOne({
+                    id: idid
+                });
+
+                if (exists2) {
+                    await interaction.reply({ content:`Im sorry but you can not use that id`, ephemeral: true})
+                    return;
+                }
 
                 if (!isTrusted && interaction.user.id !== userid) {
                     await interaction.reply({content: "*You* can not change Ids.", ephemeral: true})
