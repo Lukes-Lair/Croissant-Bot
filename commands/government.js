@@ -270,7 +270,7 @@ module.exports = {
                     { upsert: true, new: true }
                 );
 
-                    await interaction.reply(`<@${userid}> now has the id ${idid}`);
+                    await interaction.reply({content: `<@${userid}> now has the id ${idid}`, ephemeral: true});
 
 
             } else if (subcommand === 'delete') {
@@ -286,7 +286,7 @@ module.exports = {
                 if (result){
                 await interaction.reply(`Deleted <@${userid}>'s id`)
                 } else {
-                await interaction.reply(`<@${userid}> does not have an id`)
+                await interaction.reply({content: `<@${userid}> does not have an id`, ephemeral: true})
                 }
             }
         }
