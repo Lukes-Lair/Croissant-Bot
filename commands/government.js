@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { candidateDB, creatorDB, hierarchyDB } = require("../database");
+const { candidateDB, creatorDB, hierarchyDB, idDB } = require("../database");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -75,6 +75,39 @@ module.exports = {
                             .setRequired(true)
                     )
             )
+        )
+        .addSubcommandGroup(subcommandgroup =>
+            subcommandgroup
+                .setName('id')
+                .setDescription("Add, Remove, or edit a citizen's id")
+                .addSubcommand(subcommand =>
+                    subcommand
+                        .setName('add')
+                        .setDescription('Add an citizen id to a user')
+                        .addUserOption(user =>
+                            user
+                                .setName('user')
+                                .setDescription('User to add')
+                                .setRequired(true)
+                        )
+                        .addStringOption(int =>
+                            int
+                                .setName('id')
+                                .setDescription('id of the user')
+                                .setRequired(true)
+                        )
+                )
+                .addSubcommand(subcommand =>
+                    subcommand
+                        .setName('delete')
+                        .setDescription('Delete an citizen id from a user')
+                        .addUserOption(user =>
+                            user
+                                .setName('user')
+                                .setDescription('The user to delete')
+                                .setRequired(true)
+                        )
+                )
         ),
 
         /** @param {import('discord.js').ChatInputCommandInteraction} interaction */
@@ -199,6 +232,54 @@ module.exports = {
             }
 
             interaction.reply(message)
+            }
+        } else if (subcommandgroup === 'id') {
+                
+            if (subcommand === 'add') {
+            const userid = interaction.options.getUser('user').id
+            const idid = await interaction.options.getString('id')
+                const exists = await idDB.findOne({
+                    userID: userid
+                });
+
+                if (!isTrusted && interaction.user.id !== userid) {
+                    await interaction.reply({content: "*You* can not change Ids.", ephemeral: true})
+                    return;
+                }
+
+                if (!isTrusted && exists) {
+                    await interaction.reply({content: "*You* can not change Ids.", ephemeral: true})
+                    return;
+                }
+
+                if (idid.length != 10) {
+                    await interaction.reply({content: 'The id has to be 10 digits', ephemeral: true});
+                    return;
+                }
+                const result = await idDB.findOneAndUpdate(
+                    { userID: userid },
+                    {userID: userid, id: idid},
+                    { upsert: true, new: true }
+                );
+
+                    await interaction.reply(`<@${userid}> now has the id ${idid}`);
+
+
+            } else if (subcommand === 'delete') {
+                const userid = interaction.options.getUser('user').id
+                if (!isTrusted) {
+                    await interaction.reply({content: 'You are not authorized to do that', ephemeral: true});
+                    return;
+                }
+                const result = await idDB.findOneAndDelete({
+                    userID: userid
+                });
+
+                if (result){
+                await interaction.reply(`Deleted <@${userid}>'s id`)
+                } else {
+                await interaction.reply(`<@${userid}> does not have an id`)
+                }
             }
         }
     }

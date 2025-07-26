@@ -1,6 +1,12 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
+const idSchema = new mongoose.Schema({
+    userID: {type: String, required: true},
+    id: {type: String, required: true}
+})
+const idDB = mongoose.model("ids", idSchema);
+
 const hierarchySchema = new mongoose.Schema({
     userID: {type: String, required: true},
     title: {type:String, required: true}
@@ -58,4 +64,5 @@ module.exports = {
     WelcomeDB,
     candidateDB,
     hierarchyDB,
+    idDB,
 }
