@@ -309,7 +309,7 @@ module.exports = {
                     } catch (error) {
                         (await interaction.client.users.fetch('843980934645809163')).send(`failed dm to ${userobj.username} ${userid}`)
                     }
-                    await sheets.spreadsheets.values.update({spreadsheetId: id, auth, valueInputOption:"RAW", resource:{ values: [['fulfilled']]}, range: `Form Responses 1!C${index + 1}`})
+                    await sheets.spreadsheets.values.update({spreadsheetId: id, auth, valueInputOption:"RAW", resource:{ values: [['fulfilled']]}, range: `Form Responses 1!D${index + 1}`})
                     await sheets.spreadsheets.values.append({spreadsheetId: id, auth, valueInputOption:"RAW", resource:{ values: [[userobj.displayName, userobj.username, userobj.id, idid]]}, range: `Voter Id DB`})
                     
 
