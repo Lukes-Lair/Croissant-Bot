@@ -1,5 +1,19 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { candidateDB, creatorDB, hierarchyDB, idDB } = require("../database");
+const { google } = require("googleapis")
+
+//google api setup
+
+  const auth = new google.auth.GoogleAuth({
+    keyFile: "sheetsapi.json",
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
+  });
+
+  const googleClient = auth.getClient();
+
+  const sheets = google.sheets({ version: "v4", auth: googleClient });
+
+    const id = "1ahGvpmcQIblb_0wpip5YQASBR8CzTlwwd8l99iUBeCA";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -230,8 +244,39 @@ module.exports = {
         } else if (subcommandgroup === 'id') {
                 
             if (subcommand === 'add') {
-            const userid = interaction.options.getUser('user').id
+                const userid = interaction.options.getUser('user').id
             const userobj = interaction.options.getUser('user')
+            const getstuff =  {
+                    auth,
+                    spreadsheetId: id,
+                    range:"Form Responses 1!C:C",
+
+                }
+
+                const value = (await sheets.spreadsheets.values.get(getstuff)).data.values.map(m => m[0]);
+                const index = value.findIndex(i => i === interaction.user.id)
+                if (index === -1) {
+                    await interaction.reply({content: 'You are not authorized to do that\n-# if you believe that there is a mistake contact <@843980934645809163> via dms', ephemeral: true});
+                    return;  
+                }
+                    
+                
+            const useridmaybe = (await sheets.spreadsheets.values.get({
+                    auth,
+                    spreadsheetId: id,
+                    range:`Form Responses 1!B${index + 1}`
+
+                })).data.values.map(m => m[0]);
+                
+                
+
+                console.log(useridmaybe);
+                if (useridmaybe[0] !== userid) {
+                    await interaction.reply({content: 'error: The id in the spreadsheet is different than the user that was inputted into the command.', ephemeral: true});
+                    return;
+                }
+
+            
             if (userobj.bot) {await interaction.reply({content: 'Bots cant vote silly', ephemeral: true}); return;}
             let idid =  Math.floor(Math.random() * 9000000000) + 1000000000;
                 const exists = await idDB.findOne({
@@ -241,8 +286,8 @@ module.exports = {
                 let exists2 = await idDB.findOne({
                     id: idid
                 });
-                if (!isTrusted && userobj.id !== interaction.user.id) {
-                    await interaction.reply({content: "*You* can not change voter ids.", ephemeral: true})
+                if (!isTrusted) {
+                    await interaction.reply({content: "You are not authorized to do that\n-# if you believe that there is a mistake contact <@843980934645809163> via dms", ephemeral: true})
                     return;
                 }
                 
@@ -259,13 +304,13 @@ module.exports = {
                     {userID: userid, id: idid},
                     { upsert: true, new: true }
                 );
-                    if (userobj.id !== interaction.user.id) {
-                        await interaction.reply({content: `<@${userid}> now has a new voter id`, ephemeral: true});
-                    } else {
-                        await interaction.reply({content: `<@${userid}> now has the voter id of ||${idid}||`, ephemeral: true});
-                    }
+
                     
+                    await interaction.reply({content: `<@${userid}> now has the voter id of ||${idid}||`, ephemeral: true});
                     await userobj.send(`Your Croissantopia Voter ID is now ||${idid}||. This is the number you will use when voting\n-# This is confidential info and should not be shared.\n-# If you believe a mistake has been made please contact a member of yeast or the current president`);
+                    await sheets.spreadsheets.values.update({spreadsheetId: id, auth, valueInputOption:"RAW", resource:{ values: [['fulfilled']]}, range: `Form Responses 1!C${index + 1}`})
+                    await sheets.spreadsheets.values.append({spreadsheetId: id, auth, valueInputOption:"RAW", resource:{ values: [[userobj.displayName, userobj.username, userobj.id, idid]]}, range: `Voter Id DB`})
+                    
 
 
             } else if (subcommand === 'delete') {
