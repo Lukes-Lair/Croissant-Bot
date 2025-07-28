@@ -51,11 +51,6 @@ client.on("guildMemberAdd", (user) => {
 });
 
 client.once("ready", async () => {
-  console.log(
-    (await client.guilds.cache.get("1293733661107294279").channels.fetch()).map(
-      (m) => m.name
-    )
-  );
 
   console.log("ready");
 
