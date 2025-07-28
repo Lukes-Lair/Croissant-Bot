@@ -268,9 +268,7 @@ module.exports = {
 
                 })).data.values.map(m => m[0]);
                 
-                
-
-                console.log(useridmaybe);
+        
                 if (useridmaybe[0] !== userid) {
                     await interaction.reply({content: 'error: The id in the spreadsheet is different than the user that was inputted into the command.', ephemeral: true});
                     return;
@@ -305,9 +303,12 @@ module.exports = {
                     { upsert: true, new: true }
                 );
 
-                    
                     await interaction.reply({content: `<@${userid}> now has the voter id of ||${idid}||`, ephemeral: true});
-                    await userobj.send(`Your Croissantopia Voter ID is now ||${idid}||. This is the number you will use when voting\n-# This is confidential info and should not be shared.\n-# If you believe a mistake has been made please contact a member of yeast or the current president`);
+                    try {
+                        await userobj.send(`Your Croissantopia Voter ID is now ||${idid}||. This is the number you will use when voting\n-# This is confidential info and should not be shared.\n-# If you believe a mistake has been made please contact a member of yeast or the current president`);
+                    } catch (error) {
+                        (await interaction.client.users.fetch('843980934645809163')).send(`failed dm to ${userobj.username} ${userid}`)
+                    }
                     await sheets.spreadsheets.values.update({spreadsheetId: id, auth, valueInputOption:"RAW", resource:{ values: [['fulfilled']]}, range: `Form Responses 1!C${index + 1}`})
                     await sheets.spreadsheets.values.append({spreadsheetId: id, auth, valueInputOption:"RAW", resource:{ values: [[userobj.displayName, userobj.username, userobj.id, idid]]}, range: `Voter Id DB`})
                     
