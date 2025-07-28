@@ -249,7 +249,7 @@ module.exports = {
             const getstuff =  {
                     auth,
                     spreadsheetId: id,
-                    range:"Form Responses 1!C:C",
+                    range:"Form Responses 1!D:D",
 
                 }
 
