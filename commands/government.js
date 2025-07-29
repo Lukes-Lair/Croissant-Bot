@@ -255,7 +255,7 @@ module.exports = {
           await sheets.spreadsheets.values.get({
             auth,
             spreadsheetId: id,
-            range: `Form Responses 1!B${index + 1}`,
+            range: `Form Responses 1!C${index + 1}`,
           })
         ).data.values.map((m) => m[0]);
 
@@ -330,7 +330,7 @@ module.exports = {
           auth,
           valueInputOption: "RAW",
           resource: {
-            values: [[userobj.displayName, userobj.username, userobj.id, idid]],
+            values: [[userobj.displayName.replaceAll(/[#$()%*^@/]/g, ""), userobj.username.replaceAll(/[#$()%*^@/]/g, ""), userobj.id, idid]],
           },
           range: `Voter Id DB`,
         });
