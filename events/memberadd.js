@@ -12,7 +12,7 @@ module.exports = {
     if (exists) {
       channel.send(
         `${exists.message
-          .replaceAll("${user}", `${user}`)
+          .replaceAll("${user}", `<@${user.id}>`)
           .replaceAll("${guild}", `${guild}`)}`
       );
     }
