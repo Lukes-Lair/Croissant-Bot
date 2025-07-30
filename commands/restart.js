@@ -16,7 +16,7 @@ module.exports = {
       });
       return;
     }
-    await interaction.reply({ content: 'restarting', ephemeral: true });
+    await interaction.reply({ content: 'restarting ...', ephemeral: true });
     exec(`sudo ${path.join("..", "restart.sh")}`, async (error) => {
       if (error) {
         console.error(`Error during restart:\n${error.message}`);
