@@ -8,13 +8,26 @@ module.exports = {
     .setDescription("Add, edit, or disable welcome messages")
     .addSubcommand((subcommand) =>
       subcommand
-        .setName("add")
-        .setDescription("add or edit the welcome channel")
+        .setName("join")
+        .setDescription("add or edit the message when a user joins")
         .addStringOption((string) =>
           string
             .setName("message")
             .setDescription(
-              "What will be the welcome message. Use ${user} = user who joined. Use ${guild} = server name"
+              "What will be the welcome message. ${user} = user who joined. ${guild} = server name"
+            )
+            .setRequired(true)
+        )
+    )
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('leave')
+        .setDescription('add or edit the message when a user leaves the server')
+        .addStringOption(string =>
+          string
+            .setName('message')
+            .setDescription(
+              "What will be the message. ${user} = user who joined. ${guild} = server name"
             )
             .setRequired(true)
         )
@@ -35,9 +48,9 @@ module.exports = {
     const guild = interaction.guild.id;
     const messageText = interaction.options.getString("message");
     const subcommand = interaction.options.getSubcommand();
-    if (subcommand === "add") {
+    if (subcommand === "join") {
       await WelcomeDB.findOneAndUpdate(
-        { guildID: guild },
+        { guildID: guild, type: 'join'},
         { guildID: guild, message: messageText },
         { upsert: true, new: true }
       );
@@ -56,9 +69,20 @@ module.exports = {
 
       await WelcomeDB.findOneAndDelete({
         guildID: guild,
+        type: 'join'
       });
 
       interaction.reply("Disabled Welcome Messages");
+    } else if (subcommand === 'leave') {
+      await WelcomeDB.findOneAndUpdate(
+        { guildID: guild, type: 'leave'},
+        { guildID: guild, message: messageText },
+        { upsert: true, new: true }
+      );
+
+      interaction.reply(
+        `I will now say farewell to people with the message \`${messageText}\``
+      );
     }
   },
 };

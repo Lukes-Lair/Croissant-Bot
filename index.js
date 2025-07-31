@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { execute } = require("./events/interaction.js");
 const { executeMessage, deleteFromSpam } = require("./events/messagecreate.js");
+const { executeLeave } = require('./events/memberleave.js')
 const { executeAdd } = require("./events/memberadd.js");
 require("dotenv").config();
 
@@ -49,6 +50,10 @@ setInterval(deleteFromSpam, 3000);
 client.on("guildMemberAdd", (user) => {
   executeAdd(user);
 });
+
+client.on("guildMemberRemove", (user) => {
+  executeLeave(user);
+})
 
 client.once("ready", async () => {
 

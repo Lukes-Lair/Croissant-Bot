@@ -7,20 +7,27 @@ const idSchema = new mongoose.Schema({
 });
 const idDB = mongoose.model("ids", idSchema);
 
+
 const hierarchySchema = new mongoose.Schema({
   userID: { type: String, required: true },
   title: { type: String, required: true },
 });
 const hierarchyDB = mongoose.model("hierarchy", hierarchySchema);
+
+
 const candidateSchema = new mongoose.Schema({
   userID: { type: String, required: true },
 });
 const candidateDB = mongoose.model("candidates", candidateSchema);
+
+
 const welcomeSchema = new mongoose.Schema({
   guildID: { type: String, required: true },
   message: { type: String, required: true },
+  type: { type: String, required: true}
 });
 const WelcomeDB = mongoose.model("welcome", welcomeSchema);
+
 
 const croissantEmojiSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now() },
@@ -33,6 +40,7 @@ const CroissantEmojiDB = mongoose.model(
   croissantEmojiSchema
 );
 
+
 const croissantMessagesSchema = new mongoose.Schema({
   userID: { type: String, required: true },
   guildID: { type: String, required: true },
@@ -44,6 +52,7 @@ const CroissantMessagesDB = mongoose.model(
   "croissantmessages",
   croissantMessagesSchema
 );
+
 
 const creatorSchema = new mongoose.Schema({
   userID: { type: String, required: true },
