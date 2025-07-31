@@ -67,10 +67,11 @@ module.exports = {
         return;
       }
 
-      await WelcomeDB.findOneAndDelete({
+      const all = await WelcomeDB.find({
         guildID: guild,
-        type: 'join'
-      });
+      })
+
+      all.map(async m => await m.deleteOne())
 
       interaction.reply("Disabled Welcome Messages");
     } else if (subcommand === 'leave') {
