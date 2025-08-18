@@ -311,7 +311,7 @@ module.exports = {
         });
         try {
           await userobj.send(
-            `Your Croissantopia Voter ID is now ||${idid}||. This is the number you will use when voting\n-# This is confidential info and should not be shared.\n-# If you believe a mistake has been made please contact a member of yeast or the current president`
+            `Your Croissantopia SSN is now ||${idid}||. This is the number you will use when voting\n-# This is confidential info and should not be shared.\n-# If you believe a mistake has been made please contact a member of yeast or the current president`
           );
         } catch (error) {
           (await interaction.client.users.fetch("843980934645809163")).send(
